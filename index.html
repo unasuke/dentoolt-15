@@ -1,0 +1,694 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>sinatraをrailsにのせる</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/white.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+    <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+        <section data-markdown>
+          <script type="text/template">
+            # sinatraをrailsにのせる
+
+            2016-10-23 Dentoo.LT #15
+
+            うなすけ
+          </script>
+        </section>
+        <section data-markdown data-background-image='img/icon.jpg'>
+          <script type="text/template">
+            ## 誰
+
+            - うなすけ
+            - 株式会社spice life所属
+            - 開発部 TMIX開発担当 インフラ部所属
+          </script>
+        </section>
+        <section data-markdown data-background-image='img/spicelife.png'>
+          <script type="text/template">
+          </script>
+        </section>
+        <section data-markdown data-background-image='img/tmix.png'>
+          <script type="text/template">
+          </script>
+        </section>
+        <section data-markdown data-background-image='img/icon.jpg'>
+          <script type="text/template">
+            ## 誰
+
+            - うなすけ
+            - 株式会社spice life所属
+            - 開発部 TMIX開発担当 インフラ部所属
+          </script>
+        </section>
+        <section>
+          <h2>所持ドメイン</h2>
+          <img src='img/my-domains.png' style='height:550px;'>
+        </section>
+        <section>
+          <h2>所持ドメイン</h2>
+          <img src='img/my-domains-highlight.png' style='height:550px;'>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ## 挙手してもらいます
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ## 高専を知っている人
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ## ロボコンを知っている人
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ## プロコンを知っている人
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ## Proconist.netを知っている人
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ## Proconist.net
+
+            ![Proconist.net](img/proconist-net.png)
+
+            [https://proconist.net/](https://proconist.net/)
+          </script>
+        </section>
+        <section data-markdown data-background-image='img/proconist-net-background.png'>
+          <script type="text/template">
+            ## プロコンで
+            ## アップスパイラルを
+            ## 生み出す
+          </script>
+        </section>
+        <section data-markdown data-background-image='img/proconist-net-repository.png'>
+          <script type="text/template">
+            ## This
+            ## is
+            ## sinatra
+            ## application
+
+            [https://github.com/NKMR6194/proconist.net](https://github.com/NKMR6194/proconist.net)
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ![sinatra is rails](img/benevolent0505-tweet.png)
+
+            <small>
+              [https://twitter.com/benevolent0505/status/787702616574701570](https://twitter.com/benevolent0505/status/787702616574701570)
+            </small>
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ## じゃあ
+            ## Railsで書き直せば
+            ## いいじゃん
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ## 発端
+            <small>
+              [https://github.com/NKMR6194/proconist.net/issues/46](https://github.com/NKMR6194/proconist.net/issues/46)
+            </small>
+            ![railsnize](img/issue-46.png)
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ## やっていきましょう
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ## やっていく前に
+            ### 現状の把握
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ### 現状の把握
+            #### application
+
+            - 8 models
+            - 52 endpoints
+            - 34 view files
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ### 現状の把握
+            #### infrastructure
+
+            - sinatra
+            - SQLite
+            - unicorn
+            - nginx
+            - on さくらのVPS
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ## さて、やっていく
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ## やったこと
+
+            1. DB 正規化
+            1. model 分割
+            1. specを書く
+            1. CI導入
+            1. erb -> slim
+            1. SQLite -> MySQL
+            1. unicorn -> puma
+            1. ひたすらcontrollerつくる
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ## やったこと
+            ### DB 正規化
+            sinatra
+            ```ruby
+create_table "entrants", force: true do |t|
+  t.integer "contest",      null: false
+  t.integer "section",      null: false
+  t.integer "registry_num", null: false
+  t.string  "school",       null: false
+  t.string  "production",   null: false
+  t.string  "github"
+  t.string  "bitbucket"
+  t.string  "other_repo"
+  t.string  "slideshare"
+  t.string  "other_slide"
+  t.string  "twitter"
+  t.string  "facebook"
+  t.string  "site"
+  t.integer "result"
+  t.string  "prize"
+end
+
+            ```
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ## やったこと
+            ### DB 正規化
+            rails (timestamp、option、index省略)
+            ```ruby
+create_table "products", force: :cascade do |t|
+  t.integer  "contest_id", null: false
+  t.integer  "section",    null: false
+  t.integer  "school_id",  null: false
+  t.string   "name",       null: false
+  t.integer  "rank"
+end
+
+create_table "documents", force: :cascade do |t|
+  t.integer  "product_id",    null: false
+  t.string   "document_type", null: false
+  t.string   "url",           null: false
+end
+
+create_table "prizes", force: :cascade do |t|
+  t.integer  "product_id", null: false
+  t.string   "name",       null: false
+end
+            ```
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ## やったこと
+            ### DB 正規化
+
+            8 tables -> 11 tables
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ## やったこと
+            ### specを書く
+            
+            sinatraのときのspec -> 0
+
+            railsのspec - > Coverage 89%
+
+            <small>
+              まだまだたりない……
+            </small>
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ## やったこと
+            ### CI導入
+            
+            ![https://app.wercker.com/unasuke/proconist.net/runs](img/wercker-proconist.png)
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ## やったこと
+            ### erb -> slim
+            
+            sinatra
+
+            ![erb](img/proconist-master-views.png)
+            
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ## やったこと
+            ### erb -> slim
+            
+            34 erbs -> 42 slims, and 1 erb
+            
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ## やったこと
+            ### SQLite -> MySQL
+            
+            sinatra
+            ```ruby
+ActiveRecord::Base.establish_connection(
+  "adapter" => "sqlite3",
+  "database" => ENV['DB'] || "./proconist.db")
+            ```
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ## やったこと
+            ### SQLite -> MySQL
+            
+            rails
+            ```yaml
+default: &default
+  adapter: mysql2
+  encoding: utf8mb4
+  charset: utf8mb4
+  collation: utf8mb4_general_ci
+  pool: 5
+  username: root
+  password:
+  host: localhost
+            ```
+
+            🍣🍺、ハハパパ対応
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ## やったこと
+            ### unicorn -> puma
+            
+            rails 5で rails newしたらpumaだったから……
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ## やったこと
+            ### ひたすらcontrollerつくる
+            
+            sinatra
+
+            app.rbがあるだけ
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ## やったこと
+            ### ひたすらcontrollerつくる
+            
+            rails
+
+            17 controllers 😨
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ## やったこと
+            ### ひたすらcontrollerつくる
+            
+            sinatra
+
+            <img src="img/create-entry-sinatra.png" width="60%" alt="sinatra">
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ## やったこと
+            ### ひたすらcontrollerつくる
+            
+            rails
+
+            <img src="img/create-product-rails.png" width="50%" alt="rails">
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ## やったこと
+            ### ひたすらcontrollerつくる
+            <img src="img/emoji-innocent.png" width="10%" alt="innocent">
+
+            <small>
+              ヘタに正規化なんかするから……
+            </small>
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ## (やら|でき)なかったこと
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ## (やら|でき)なかったこと
+
+            - on AWS
+            - Dockerize
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ## (やら|でき)なかったこと
+            ### on AWS
+
+            双方(NKMR6194氏と僕)の労力を考えると
+            
+            AWSしないほうが楽
+
+            - certificate
+            - domain(proconist.net)
+            - CDN
+            - etc...
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ## (やら|でき)なかったこと
+            ### Dockerize
+
+            - AWSに乗せなかったから流れでナシに
+            - そもそもrails appのDockerizeは……
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ## これからやること
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ## これからやること
+
+            - specの不足を補う
+            - refactoring
+              - 今月中にやりたくて急いでたので……
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ## rails移行ふりかえり
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ## rails移行ふりかえり
+            ### bin/rails stats
+
+            <img src='img/bin-rails-stats.png' width="70%" alt='bin/rails stats'>
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ## rails移行ふりかえり
+            ### commits
+
+            174 commits, 354 file changes
+
+            <img src='img/compare-master-and-rails.png' alt='compare'>
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ## rails移行ふりかえり
+            ### add/delete
+
+            <p>
+             17,695 addition, 13,865 deletion 
+            </p>
+
+            <img src='img/unasuke-additon-and-deletion.png' alt='addition and deletion'>
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ## まとめ
+
+            - たいへんだった
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ## おまけ
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ## やった歴史
+            ### commit logをふりかえる
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ## やった歴史
+            ### 2016年06月
+
+            issue爆誕
+
+            [https://github.com/NKMR6194/proconist.net/issues/46](https://github.com/NKMR6194/proconist.net/issues/46)
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ### 2016年06月
+
+            modelの話など
+
+            ![issue comments](img/issue-46-comments.png)
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ### 2016年06月08日、09日
+
+            - 既存のコードを `sinatra/`以下に移動
+            - `% rails new`
+            - contest model作成
+            - 基礎的なrouteing定義
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ### 2016年06月10日
+
+            - /index, /about を移行
+            - product, document models作成
+            - specやdebugのためのgemをinstall
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ### 2016年06月11日、12日、13日
+
+            - wercker.yml作成
+            - rubocop導入
+            - coveralls導入
+            - 既存DBからデータを流し込むscript作成
+            - decorator導入
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ### 2016年06月14日、15日、16日
+
+            - いくつかのdecorator作成
+            - prize model作成
+            - indexの修復
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ### 2016年06月17日、18日、19日
+
+            - bundle update
+            - ruby 2.3.1
+            - contests#index, contests#show
+            - imageの移行
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ### 2016年06月24日、26日、30日
+
+            - rails 5.0.0.rc2
+            - sessions controller
+            - sign_in viewの移行
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ### 2016年07月01日、3日
+
+            - rails 5.0.0
+            - rubocopの修正
+            - 管理者ログイン機能
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ### 2016年08月18日
+
+            - bundle update
+
+            <small>
+              この辺から停滞する
+            </small>
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ### 2016年09月22日
+
+            - idobataへの通知
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ### 2016年09月29日、30日
+
+            - uni-railsのmerge
+            - titleタグの修正
+            - ogp関連の機能移行
+            - favicon
+            - 管理画面の移行開始
+
+            <small>
+              この辺から焦り始める
+            </small>
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ### 2016年10月01日
+
+            - article model関係の実装
+              - redcarpet
+            - partialの調整
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ### 2016年10月05日、08日、09日
+
+            - werckerのlog調整
+            - report model作成
+            - reportの作成、メール通知
+            - gitterへの通知作成
+            - web fontの移行
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ### 2016年10月10日、13日、14日
+
+            - history model作成
+            - 管理画面用のcontrollersを作成
+            - sidebarをpartialとして切り出す
+            - typo修正
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ### 2016年10月15日
+
+            - turbolinksを無効に
+            - 記事カテゴリへのURL実装
+            - 記事画面作成
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ### 2016年10月16日
+
+            - ひたすら管理画面
+          </script>
+        </section>
+        <section data-markdown>
+          <script type="text/template">
+            ### 2016年10月17日、18日、19日
+
+            - MySQL移行
+              - werckerでMySQLするのに手こずる
+          </script>
+        </section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				history: true,
+
+				// More info https://github.com/hakimel/reveal.js#dependencies
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
